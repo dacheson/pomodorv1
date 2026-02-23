@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>25:00 — Focus</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Aria-live region for screen reader announcements -->
+  <div id="aria-announcement" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
+
+  <div class="app">
+    <!-- Header with title and toolbar -->
+    <header class="header">
+      <h1 class="title">Pomodoro Timer</h1>
+      <div class="toolbar">
+        <button id="mute-btn" class="icon-btn" aria-label="Toggle mute" title="Toggle mute">
+          <svg class="icon-speaker" id="icon-speaker-on" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+          <svg class="icon-speaker" id="icon-speaker-off" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <line x1="23" y1="9" x2="17" y2="15"/>
+            <line x1="17" y1="9" x2="23" y2="15"/>
+          </svg>
+        </button>
+        <button id="settings-btn" class="icon-btn" aria-label="Toggle settings" title="Toggle settings">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+        <button id="sessions-btn" class="icon-btn" aria-label="Toggle session history" title="Toggle session history">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 8v4l3 3"/>
+            <circle cx="12" cy="12" r="10"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mode tabs -->
+    <nav class="mode-tabs" aria-label="Timer mode selection">
+      <button class="mode-tab active" data-mode="focus" aria-label="Focus mode">Focus</button>
+      <button class="mode-tab" data-mode="shortBreak" aria-label="Short Break mode">Short Break</button>
+      <button class="mode-tab" data-mode="longBreak" aria-label="Long Break mode">Long Break</button>
+    </nav>
+
+    <!-- Timer display -->
+    <div class="timer-container">
+      <svg class="progress-ring" viewBox="0 0 260 260" width="260" height="260">
+        <circle class="progress-ring__bg" cx="130" cy="130" r="120" fill="none" stroke-width="6"/>
+        <circle class="progress-ring__circle" cx="130" cy="130" r="120" fill="none" stroke-width="6"
+          stroke-dasharray="753.98" stroke-dashoffset="0"
+          transform="rotate(-90 130 130)"/>
+      </svg>
+      <div class="timer-display">
+        <span id="timer-text" class="timer-text">25:00</span>
+        <span id="timer-mode-label" class="timer-mode-label">Focus</span>
+        <span id="pomodoro-counter" class="pomodoro-counter">1 / 4</span>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button id="start-btn" class="btn btn-primary" aria-label="Start timer">Start</button>
+      <button id="pause-btn" class="btn btn-secondary" aria-label="Pause timer" style="display:none;">Pause</button>
+      <button id="reset-btn" class="btn btn-ghost" aria-label="Reset timer">Reset</button>
+    </div>
+
+    <!-- Settings panel -->
+    <div id="settings-panel" class="panel settings-panel" aria-label="Settings" hidden>
+      <h2 class="panel-title">Settings</h2>
+      <div class="setting-row">
+        <label for="setting-focus">Focus duration (min)</label>
+        <input type="number" id="setting-focus" min="1" max="90" value="25" aria-label="Focus duration in minutes">
+      </div>
+      <div class="setting-row">
+        <label for="setting-short">Short Break (min)</label>
+        <input type="number" id="setting-short" min="1" max="30" value="5" aria-label="Short break duration in minutes">
+      </div>
+      <div class="setting-row">
+        <label for="setting-long">Long Break (min)</label>
+        <input type="number" id="setting-long" min="1" max="60" value="15" aria-label="Long break duration in minutes">
+      </div>
+      <div class="setting-row">
+        <label for="setting-interval">Long break interval</label>
+        <input type="number" id="setting-interval" min="2" max="8" value="4" aria-label="Number of focus sessions before a long break">
+      </div>
+      <div class="setting-row toggle-row">
+        <label for="setting-autobreak">Auto-start breaks</label>
+        <input type="checkbox" id="setting-autobreak" aria-label="Auto-start breaks after focus ends">
+      </div>
+      <div class="setting-row toggle-row">
+        <label for="setting-autofocus">Auto-start focus</label>
+        <input type="checkbox" id="setting-autofocus" aria-label="Auto-start focus after break ends">
+      </div>
+    </div>
+
+    <!-- Sessions panel -->
+    <div id="sessions-panel" class="panel sessions-panel" aria-label="Session history" hidden>
+      <h2 class="panel-title">Session History</h2>
+      <div class="stats-bar">
+        <div class="stat">
+          <span class="stat-value" id="stat-focus-count">0</span>
+          <span class="stat-label">Focus sessions</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="stat-focus-min">0</span>
+          <span class="stat-label">Focus min</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="stat-break-min">0</span>
+          <span class="stat-label">Break min</span>
+        </div>
+      </div>
+      <div id="session-log" class="session-log" aria-label="Session log"></div>
+      <div class="clear-history-wrap">
+        <button id="clear-history-btn" class="btn btn-danger" aria-label="Clear session history">Clear History</button>
+        <div id="clear-confirm" class="clear-confirm" hidden>
+          <span>Are you sure?</span>
+          <button id="clear-yes" class="btn btn-danger btn-sm" aria-label="Confirm clear history">Yes, clear</button>
+          <button id="clear-no" class="btn btn-ghost btn-sm" aria-label="Cancel clear history">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Keyboard shortcuts hint -->
+    <footer class="shortcuts-hint">
+      <kbd>Space</kbd> Start/Pause &nbsp; <kbd>R</kbd> Reset &nbsp; <kbd>M</kbd> Mute &nbsp; <kbd>S</kbd> Settings
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
