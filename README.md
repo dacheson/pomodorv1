@@ -1,6 +1,10 @@
 # Pomodoro Focus Timer
 
-A clean, responsive Pomodoro focus timer web app with customizable intervals, sound notifications, and session tracking. Built with vanilla HTML, CSS, and JavaScript — no frameworks, no dependencies.
+A clean, responsive Pomodoro focus timer with customizable intervals, sound notifications and session tracking. Built with vanilla HTML, CSS and JavaScript — no frameworks, no build step, no dependencies.
+
+**[→ Try it live](https://dacheson.github.io/pomodoro-timer/)**
+
+![A focus session running, showing the countdown ring and mode tabs](docs/screenshot.png)
 
 ## Features
 
@@ -17,20 +21,30 @@ A clean, responsive Pomodoro focus timer web app with customizable intervals, so
 - **Keyboard shortcuts:** Space (start/pause), R (reset), M (mute), S (settings)
 - **Accessible:** ARIA labels, live regions, and full keyboard navigation
 
+## Running locally
+
+No tooling required — the app is three static files.
+
+```bash
+git clone https://github.com/dacheson/pomodoro-timer.git
+cd pomodoro-timer
+python -m http.server 8000   # or: npx serve .
+```
+
+Then open <http://localhost:8000>.
+
+## Project structure
+
+```
+index.html    markup, timer ring, settings and history panels
+style.css     dark theme, layout, responsive rules
+script.js     timer state machine, Web Audio chimes, localStorage
+```
+
 ## Deployment
 
-This app is deployed via **GitHub Pages** using a GitHub Actions workflow. No build step is required — it serves static files directly from the repository root.
+Deployed to GitHub Pages by the workflow in `.github/workflows/`, which publishes the repository root on every push to `main`. No build step runs.
 
-### To deploy your own copy
+## Licence
 
-1. Create a new GitHub repo (do **not** initialise with a README)
-2. ```bash
-   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-   git push -u origin main
-   ```
-3. In your GitHub repo settings → Pages → set source to **GitHub Actions**
-4. Visit `https://YOUR_USERNAME.github.io/YOUR_REPO/`
-
-## License
-
-MIT
+[MIT](LICENSE)
